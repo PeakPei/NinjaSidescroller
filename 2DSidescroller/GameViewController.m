@@ -8,6 +8,7 @@
 
 #import "GameViewController.h"
 #import "GameScene.h"
+#import "GameOverScene.h"
 
 @implementation GameViewController
 
@@ -16,11 +17,18 @@
 
     // Load the SKScene from 'GameScene.sks'
     GameScene *scene = (GameScene *)[SKScene nodeWithFileNamed:@"GameScene"];
+    GameOverScene *scene1 = (GameOverScene *)[SKScene nodeWithFileNamed:@"GameOverScene"];
+    GamePlayScene *scene2 = (GamePlayScene *)[SKScene nodeWithFileNamed:@"GamePlayScene"];
     
     // Set the scale mode to scale to fit the window
-    scene.scaleMode = SKSceneScaleModeAspectFill;
+    scene.scaleMode = SKSceneScaleModeResizeFill;
     
     SKView *skView = (SKView *)self.view;
+    
+    //Init Singleton Universe with scenes
+    [[Universe sharedInstance] setGs:scene];
+    [[Universe sharedInstance] setGos:scene1];
+    [[Universe sharedInstance] setGps:scene2];
     
     // Present the scene
     [skView presentScene:scene];
