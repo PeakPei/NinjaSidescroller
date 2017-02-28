@@ -110,7 +110,7 @@
 - (void)touchDownAtPoint:(CGPoint)pos {
     //SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
     //[charNode runAction:atlasAnimation];
-    NSLog(@"%@", NSStringFromCGPoint(pos));
+    //NSLog(@"%@", NSStringFromCGPoint(pos));
     //SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
     /*if(isJumping == NO){
         isJumping = YES;
@@ -131,7 +131,7 @@
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
     if(touchedNode == label && gameEnd == NO){
         [label runAction:[SKAction fadeOutWithDuration:2.0]];
-        NSLog(@"Start pressed");
+        //NSLog(@"Start pressed");
         gameEnd = YES;
         
         //If start is pressed, shift to next scene
@@ -166,5 +166,18 @@
             bg.position = CGPointMake(bg.position.x + bg.size.width * 2, bg.position.y);
         }
     }];
+    SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
+
+   // NSLog(@"%f",[charNode.physicsBody velocity].dy);
+    if([charNode.physicsBody velocity].dy > 500.0f){
+        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, 500.0f);
+        [charNode.physicsBody setVelocity:tmp];
+        NSLog(@">600");
+    }
+    if([charNode.physicsBody velocity].dy < -300.0f){
+        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, -300.0f);
+        [charNode.physicsBody setVelocity:tmp];
+        NSLog(@"<-300");
+    }
 }
 @end
