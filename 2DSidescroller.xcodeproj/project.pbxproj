@@ -10,6 +10,22 @@
 		8351AF991E64CE2700651760 /* sprites_base.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AF981E64CE2700651760 /* sprites_base.png */; };
 		8351AF9B1E64CFDE00651760 /* running.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 8351AF9A1E64CFDE00651760 /* running.atlas */; };
 		8351AF9D1E64FAE800651760 /* jump.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 8351AF9C1E64FAE800651760 /* jump.atlas */; };
+		8351AFA41E663DFB00651760 /* parallax-mountain-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AF9F1E663DFB00651760 /* parallax-mountain-bg.png */; };
+		8351AFA51E663DFB00651760 /* parallax-mountain-foreground-trees.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFA01E663DFB00651760 /* parallax-mountain-foreground-trees.png */; };
+		8351AFA61E663DFB00651760 /* parallax-mountain-montain-far.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFA11E663DFB00651760 /* parallax-mountain-montain-far.png */; };
+		8351AFA71E663DFB00651760 /* parallax-mountain-mountains.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFA21E663DFB00651760 /* parallax-mountain-mountains.png */; };
+		8351AFA81E663DFB00651760 /* parallax-mountain-trees.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFA31E663DFB00651760 /* parallax-mountain-trees.png */; };
+		8351AFB71E66535400651760 /* Layer_0000_9.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFAC1E66535400651760 /* Layer_0000_9.png */; };
+		8351AFB81E66535400651760 /* Layer_0001_8.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFAD1E66535400651760 /* Layer_0001_8.png */; };
+		8351AFB91E66535400651760 /* Layer_0002_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFAE1E66535400651760 /* Layer_0002_7.png */; };
+		8351AFBA1E66535400651760 /* Layer_0003_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFAF1E66535400651760 /* Layer_0003_6.png */; };
+		8351AFBB1E66535400651760 /* Layer_0004_Lights.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB01E66535400651760 /* Layer_0004_Lights.png */; };
+		8351AFBC1E66535400651760 /* Layer_0005_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB11E66535400651760 /* Layer_0005_5.png */; };
+		8351AFBD1E66535400651760 /* Layer_0006_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB21E66535400651760 /* Layer_0006_4.png */; };
+		8351AFBE1E66535400651760 /* Layer_0007_Lights.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB31E66535400651760 /* Layer_0007_Lights.png */; };
+		8351AFBF1E66535400651760 /* Layer_0008_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB41E66535400651760 /* Layer_0008_3.png */; };
+		8351AFC01E66535400651760 /* Layer_0009_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB51E66535400651760 /* Layer_0009_2.png */; };
+		8351AFC11E66535400651760 /* Layer_0010_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB61E66535400651760 /* Layer_0010_1.png */; };
 		83B147881E64016100D673A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B147871E64016100D673A0 /* main.m */; };
 		83B1478B1E64016100D673A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B1478A1E64016100D673A0 /* AppDelegate.m */; };
 		83B1478D1E64016100D673A0 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 83B1478C1E64016100D673A0 /* GameScene.sks */; };
@@ -52,6 +68,22 @@
 		8351AF981E64CE2700651760 /* sprites_base.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sprites_base.png; sourceTree = "<group>"; };
 		8351AF9A1E64CFDE00651760 /* running.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = running.atlas; sourceTree = "<group>"; };
 		8351AF9C1E64FAE800651760 /* jump.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = jump.atlas; sourceTree = "<group>"; };
+		8351AF9F1E663DFB00651760 /* parallax-mountain-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "parallax-mountain-bg.png"; sourceTree = "<group>"; };
+		8351AFA01E663DFB00651760 /* parallax-mountain-foreground-trees.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "parallax-mountain-foreground-trees.png"; sourceTree = "<group>"; };
+		8351AFA11E663DFB00651760 /* parallax-mountain-montain-far.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "parallax-mountain-montain-far.png"; sourceTree = "<group>"; };
+		8351AFA21E663DFB00651760 /* parallax-mountain-mountains.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "parallax-mountain-mountains.png"; sourceTree = "<group>"; };
+		8351AFA31E663DFB00651760 /* parallax-mountain-trees.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "parallax-mountain-trees.png"; sourceTree = "<group>"; };
+		8351AFAC1E66535400651760 /* Layer_0000_9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0000_9.png; path = "Background layers/Layer_0000_9.png"; sourceTree = "<group>"; };
+		8351AFAD1E66535400651760 /* Layer_0001_8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0001_8.png; path = "Background layers/Layer_0001_8.png"; sourceTree = "<group>"; };
+		8351AFAE1E66535400651760 /* Layer_0002_7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0002_7.png; path = "Background layers/Layer_0002_7.png"; sourceTree = "<group>"; };
+		8351AFAF1E66535400651760 /* Layer_0003_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0003_6.png; path = "Background layers/Layer_0003_6.png"; sourceTree = "<group>"; };
+		8351AFB01E66535400651760 /* Layer_0004_Lights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0004_Lights.png; path = "Background layers/Layer_0004_Lights.png"; sourceTree = "<group>"; };
+		8351AFB11E66535400651760 /* Layer_0005_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0005_5.png; path = "Background layers/Layer_0005_5.png"; sourceTree = "<group>"; };
+		8351AFB21E66535400651760 /* Layer_0006_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0006_4.png; path = "Background layers/Layer_0006_4.png"; sourceTree = "<group>"; };
+		8351AFB31E66535400651760 /* Layer_0007_Lights.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0007_Lights.png; path = "Background layers/Layer_0007_Lights.png"; sourceTree = "<group>"; };
+		8351AFB41E66535400651760 /* Layer_0008_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0008_3.png; path = "Background layers/Layer_0008_3.png"; sourceTree = "<group>"; };
+		8351AFB51E66535400651760 /* Layer_0009_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0009_2.png; path = "Background layers/Layer_0009_2.png"; sourceTree = "<group>"; };
+		8351AFB61E66535400651760 /* Layer_0010_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0010_1.png; path = "Background layers/Layer_0010_1.png"; sourceTree = "<group>"; };
 		83B147831E64016100D673A0 /* 2DSidescroller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2DSidescroller.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83B147871E64016100D673A0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		83B147891E64016100D673A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -110,6 +142,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8351AF9E1E663DFB00651760 /* MountainParallax */ = {
+			isa = PBXGroup;
+			children = (
+				8351AF9F1E663DFB00651760 /* parallax-mountain-bg.png */,
+				8351AFA01E663DFB00651760 /* parallax-mountain-foreground-trees.png */,
+				8351AFA11E663DFB00651760 /* parallax-mountain-montain-far.png */,
+				8351AFA21E663DFB00651760 /* parallax-mountain-mountains.png */,
+				8351AFA31E663DFB00651760 /* parallax-mountain-trees.png */,
+			);
+			name = MountainParallax;
+			path = layers;
+			sourceTree = "<group>";
+		};
+		8351AFAA1E66535400651760 /* ForestParallax */ = {
+			isa = PBXGroup;
+			children = (
+				8351AFAC1E66535400651760 /* Layer_0000_9.png */,
+				8351AFAD1E66535400651760 /* Layer_0001_8.png */,
+				8351AFAE1E66535400651760 /* Layer_0002_7.png */,
+				8351AFAF1E66535400651760 /* Layer_0003_6.png */,
+				8351AFB01E66535400651760 /* Layer_0004_Lights.png */,
+				8351AFB11E66535400651760 /* Layer_0005_5.png */,
+				8351AFB21E66535400651760 /* Layer_0006_4.png */,
+				8351AFB31E66535400651760 /* Layer_0007_Lights.png */,
+				8351AFB41E66535400651760 /* Layer_0008_3.png */,
+				8351AFB51E66535400651760 /* Layer_0009_2.png */,
+				8351AFB61E66535400651760 /* Layer_0010_1.png */,
+			);
+			name = ForestParallax;
+			path = PNG;
+			sourceTree = "<group>";
+		};
 		83B1477A1E64016100D673A0 = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +214,8 @@
 				83B147931E64016100D673A0 /* GameViewController.h */,
 				83B147941E64016100D673A0 /* GameViewController.m */,
 				83B147961E64016100D673A0 /* Main.storyboard */,
+				8351AFAA1E66535400651760 /* ForestParallax */,
+				8351AF9E1E663DFB00651760 /* MountainParallax */,
 				8351AF9C1E64FAE800651760 /* jump.atlas */,
 				8351AF9A1E64CFDE00651760 /* running.atlas */,
 				83B147991E64016100D673A0 /* Assets.xcassets */,
@@ -300,18 +366,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B147981E64016100D673A0 /* Main.storyboard in Resources */,
+				8351AFC01E66535400651760 /* Layer_0009_2.png in Resources */,
+				8351AFA71E663DFB00651760 /* parallax-mountain-mountains.png in Resources */,
 				83B148181E64A50C00D673A0 /* GamePlayScene.sks in Resources */,
+				8351AFBA1E66535400651760 /* Layer_0003_6.png in Resources */,
 				83B1478D1E64016100D673A0 /* GameScene.sks in Resources */,
 				83B147C11E640A8300D673A0 /* tempBackground1.jpg in Resources */,
 				8351AF991E64CE2700651760 /* sprites_base.png in Resources */,
 				8351AF9B1E64CFDE00651760 /* running.atlas in Resources */,
+				8351AFA81E663DFB00651760 /* parallax-mountain-trees.png in Resources */,
+				8351AFA41E663DFB00651760 /* parallax-mountain-bg.png in Resources */,
 				83B147C31E64182600D673A0 /* tempBackground2.jpg in Resources */,
 				8351AF9D1E64FAE800651760 /* jump.atlas in Resources */,
+				8351AFBB1E66535400651760 /* Layer_0004_Lights.png in Resources */,
+				8351AFA51E663DFB00651760 /* parallax-mountain-foreground-trees.png in Resources */,
+				8351AFBD1E66535400651760 /* Layer_0006_4.png in Resources */,
+				8351AFB71E66535400651760 /* Layer_0000_9.png in Resources */,
+				8351AFB91E66535400651760 /* Layer_0002_7.png in Resources */,
+				8351AFBC1E66535400651760 /* Layer_0005_5.png in Resources */,
 				83B1479A1E64016100D673A0 /* Assets.xcassets in Resources */,
 				83B1479D1E64016100D673A0 /* LaunchScreen.storyboard in Resources */,
+				8351AFC11E66535400651760 /* Layer_0010_1.png in Resources */,
 				83B147C51E641CF200D673A0 /* tempWallpaper3.png in Resources */,
 				83B1480D1E6494A100D673A0 /* GameOverScene.sks in Resources */,
+				8351AFBF1E66535400651760 /* Layer_0008_3.png in Resources */,
+				8351AFA61E663DFB00651760 /* parallax-mountain-montain-far.png in Resources */,
+				8351AFBE1E66535400651760 /* Layer_0007_Lights.png in Resources */,
 				83B1478F1E64016100D673A0 /* Actions.sks in Resources */,
+				8351AFB81E66535400651760 /* Layer_0001_8.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

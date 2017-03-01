@@ -10,10 +10,12 @@
 #import "Universe.h"
 
 @implementation GamePlayScene {
-    SKLabelNode *label;
-    bool gameEnd, isJumping;
+    SKLabelNode *label, *instructionLabel;
+    bool gameEnd;
     SKAction *atlasAnimation;
     SKAction *jumpAnimation;
+    int jumps;
+    NSArray *bgArr;
 }
 
 
@@ -25,45 +27,89 @@
     label.text = @"Quit";
     label.fontSize = 30;
     label.name = @"quitLabel";
-    label.position = CGPointMake(CGRectGetMidX(self.frame),
-                                  CGRectGetMidY(self.frame));
+    label.zPosition = 200;
+    label.position = CGPointMake(self.frame.size.width*.4, self.frame.size.height*.4);
     label.alpha = 0.0;
     [self addChild:label];
     [label runAction:[SKAction fadeInWithDuration:2.0]];
     
-    gameEnd = NO; isJumping = NO;
+    instructionLabel =[SKLabelNode labelNodeWithFontNamed:@"BradleyHandITCTT-Bold"];
+    instructionLabel.text = @"Tap once to jump, tap twice to double jump";
+    instructionLabel.fontSize = 20;
+    instructionLabel.name = @"instructionLabel";
+    instructionLabel.position = CGPointMake(0,0);
+    instructionLabel.zPosition = 200;
+    [self addChild:instructionLabel];
+    [instructionLabel runAction:[SKAction fadeInWithDuration:2.0]];
     
-    //Background
-    for(int i = 0; i < 2; i++){
-        SKSpriteNode * bg =[SKSpriteNode spriteNodeWithImageNamed:@"tempWallpaper3.png"];
-        bg.anchorPoint = CGPointMake(.5,.5);
-        bg.size = CGSizeMake(self.frame.size.width, self.frame.size.height);
-        bg.position = CGPointMake(i * bg.size.width, 0);
-        bg.name = @"background";
-        bg.zPosition = -1;
-        [self addChild:bg];
-    }
+    gameEnd = NO;
+    jumps = 0;
     
-    //Character
+    // Background
+    [self setUpParallex];
+    
+    // Character
     [self addChild:[self createCharacter]];
     [self setupActions];
     
-    //Physics?
+    // Physics
     self.physicsWorld.gravity = CGVectorMake(0.0f, -9.8f);
-    //walls
+    // Walls
     SKPhysicsBody* borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
     self.physicsBody = borderBody;
     self.physicsBody.friction = 0.0f;
-    //character
+    // Character
     SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
-    character.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:character.frame.size.width/2];
+    character.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:character.frame.size.height/2];
     character.physicsBody.friction = 0.0f;
     character.physicsBody.restitution = 0.0f;
     character.physicsBody.linearDamping = 0.0f;
     character.physicsBody.allowsRotation = NO;
 }
+-(void)makePlatforms{
 
-- (SKSpriteNode*) createCharacter{
+}
+
+-(void)setUpParallex{ //Set up parallex background
+    
+    bgArr = @[
+              @"parallax-mountain-bg.png",
+              @"parallax-mountain-montain-far.png",
+              @"parallax-mountain-mountains.png",
+              @"parallax-mountain-foreground-trees.png",
+              @"parallax-mountain-trees.png"
+              ];
+    /*bgArr = @[
+              @"Layer_0010_1.png",
+              @"Layer_0009_2.png",
+              @"Layer_0008_3.png",
+              @"Layer_0007_Lights.png",
+              @"Layer_0006_4.png",
+              @"Layer_0005_5.png",
+              @"Layer_0004_Lights.png",
+              @"Layer_0003_6.png",
+              @"Layer_0002_7.png",
+              @"Layer_0001_8.png",
+              @"Layer_0000_9.png"
+              ];*/
+    for (int j = 0; j < bgArr.count; j++){
+        for(int i = 0; i < 2; i++){
+            SKSpriteNode * bg1 =[SKSpriteNode spriteNodeWithImageNamed:bgArr[j]];
+            bg1.anchorPoint = CGPointMake(.5,.5);
+            bg1.size = CGSizeMake(self.frame.size.width, self.frame.size.height);
+            bg1.position = CGPointMake(i * bg1.size.width, 0);
+            NSString *tmp = @"background";
+            NSString *tmp1 = [tmp stringByAppendingString:[NSString stringWithFormat:@"%d", j]];
+            bg1.name = tmp1;
+            bg1.zPosition = ((int)j);
+            NSLog(@"%@", tmp1);
+            NSLog(@" : %f\n", bg1.zPosition);
+            [self addChild:bg1];
+        }
+    }
+}
+
+- (SKSpriteNode*) createCharacter{ //create and return character
     SKSpriteNode *character = [SKSpriteNode spriteNodeWithImageNamed:@"sprites_base.png"];
     character.position = CGPointMake(-self.frame.size.width*.3, -self.frame.size.height*.4);
     character.zPosition = 100;
@@ -71,7 +117,7 @@
     return character;
 }
 
-- (void)setupActions {
+- (void)setupActions { //Sprite set up for character
     SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"running"];
     SKTexture *runningTex1 = [atlas textureNamed:@"sprites_01.png"];
     SKTexture *runningTex2 = [atlas textureNamed:@"sprites_02.png"];
@@ -101,26 +147,22 @@
     
 }
 
-- (void) jumpDone{
-    isJumping = NO;
-    NSLog(@"Jump done");
+//Handle doublejumps
+- (void) jump{
+    if(jumps < 1){
+        SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
+        if([charNode.physicsBody velocity].dy < -30.0f){
+            [charNode.physicsBody applyImpulse:CGVectorMake(0.0f, 100.0f)];
+        }else{[charNode.physicsBody applyImpulse:CGVectorMake(0.0f, 50.0f)];}
+        [charNode runAction:jumpAnimation];
+        NSLog(@"Jump done");
+        jumps++;
+    }
 }
 
-
 - (void)touchDownAtPoint:(CGPoint)pos {
-    //SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
-    //[charNode runAction:atlasAnimation];
-    //NSLog(@"%@", NSStringFromCGPoint(pos));
-    //SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
-    /*if(isJumping == NO){
-        isJumping = YES;
-        SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
-        [charNode runAction:jumpMovement];
-    }*/
-    SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
-    [charNode.physicsBody applyImpulse:CGVectorMake(0.0f, 35.0f)];
-    [charNode runAction:jumpAnimation];
-
+    NSLog(@"%@", NSStringFromCGPoint(pos));
+    if(pos.x <0) [self jump]; //left side of screen tap
 }
 
 - (void)touchMovedToPoint:(CGPoint)pos {
@@ -130,7 +172,7 @@
 - (void)touchUpAtPoint:(CGPoint)pos {
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
     if(touchedNode == label && gameEnd == NO){
-        [label runAction:[SKAction fadeOutWithDuration:2.0]];
+        [label runAction:[SKAction fadeOutWithDuration:3.0]];
         //NSLog(@"Start pressed");
         gameEnd = YES;
         
@@ -139,6 +181,7 @@
         //SKScene * myScene = [[GameOverScene alloc] initWithSize:self.size];
         [self.view presentScene:[[Universe sharedInstance] gos] transition: reveal];
     }
+    [instructionLabel runAction:[SKAction fadeOutWithDuration:3.0]];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -155,29 +198,40 @@
     //for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
 }
 
+-(void)runParallexBackground{
+    for(int i=1; i < bgArr.count; i++){
+        NSString *tmp = @"background";
+        NSString *tmp1 = [tmp stringByAppendingString:[NSString stringWithFormat:@"%d", i]];
+        [self enumerateChildNodesWithName:tmp1 usingBlock: ^(SKNode *node, BOOL *stop){
+            SKSpriteNode * bg = (SKSpriteNode *) node;
+            bg.position = CGPointMake(bg.position.x - (i/2), bg.position.y);
+            if (bg.position.x <= -bg.size.width) {
+                bg.position = CGPointMake(bg.position.x + bg.size.width * 2, bg.position.y);
+            }
+        }];
+    }
+}
 
 -(void)update:(CFTimeInterval)currentTime {
     // Called before each frame is rendered
-    [self enumerateChildNodesWithName:@"background" usingBlock: ^(SKNode *node, BOOL *stop){
-        SKSpriteNode * bg = (SKSpriteNode *) node;
-        bg.position = CGPointMake(bg.position.x - 5, bg.position.y);
-        
-        if (bg.position.x <= -bg.size.width) {
-            bg.position = CGPointMake(bg.position.x + bg.size.width * 2, bg.position.y);
-        }
-    }];
-    SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
-
-   // NSLog(@"%f",[charNode.physicsBody velocity].dy);
-    if([charNode.physicsBody velocity].dy > 500.0f){
-        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, 500.0f);
-        [charNode.physicsBody setVelocity:tmp];
-        NSLog(@">600");
+    if(!gameEnd){
+        [self runParallexBackground];
     }
-    if([charNode.physicsBody velocity].dy < -300.0f){
-        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, -300.0f);
+    SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
+   // NSLog(@"%f",[charNode.physicsBody velocity].dy);
+    if([charNode.physicsBody velocity].dy > 600.0f){
+        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, 600.0f);
         [charNode.physicsBody setVelocity:tmp];
-        NSLog(@"<-300");
+        //NSLog(@">700");
+    }
+    if([charNode.physicsBody velocity].dy < -350.0f){
+        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, -350.0f);
+        [charNode.physicsBody setVelocity:tmp];
+        //NSLog(@"<-300");
+    }
+    if([charNode position].y < -self.frame.size.height*.4){
+        jumps = 0;
+        //NSLog(@"%f,%f",[charNode position].x,[charNode position].y);
     }
 }
 @end
