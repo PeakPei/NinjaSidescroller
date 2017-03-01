@@ -17,10 +17,12 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     SKLabelNode *label, *instructionLabel, *instructionLabel1;
     bool gameEnd;
     SKAction *atlasAnimation;
-    SKAction *jumpAnimation;
+    SKAction *jumpAnimation, *deadAnimation;
     int jumps;
     NSArray *bgArr;
     bool runningForw;
+    SKSpriteNode *charNode;
+
 }
 
 - (void)didMoveToView:(SKView *)view {
@@ -58,6 +60,7 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     character.physicsBody.categoryBitMask = characterCategory;
     character.physicsBody.contactTestBitMask = platformCatagory;
     character.physicsBody.collisionBitMask = worldCategory|platformCatagory;
+    charNode = character;
 }
 
 - (void)didBeginContact:(SKPhysicsContact *)contact
@@ -86,22 +89,22 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 -(CGPoint)getRandPos{
     int levels = self.frame.size.height/4;
     int random = rand()%4;
-    while (random ==0) random = rand()%4;
-    int yPos = -self.frame.size.height*.5 + random*levels;
+    while (random == 0) random = rand()%4;
+    int yPos = -self.frame.size.height * .5 + random*levels;
     int hlevels = self.frame.size.width/5;
-    int random1 = rand()%5;
-    int hPos = -self.frame.size.width*.5 + random1*hlevels;
+    int random1 = rand()%7; //add two extra "frames" off screen
+    int hPos = -self.frame.size.width * .5 + random1*hlevels;
     return CGPointMake(hPos, yPos);
 }
 
 -(void)makePlatforms{
     for(int i = 0; i<10 ; i++){
-        SKSpriteNode *plat = [SKSpriteNode spriteNodeWithColor:[SKColor whiteColor] size:CGSizeMake((float)self.frame.size.width/5, (float)self.frame.size.height/100) ];
+        SKSpriteNode *plat = [SKSpriteNode spriteNodeWithImageNamed:@"log.png"];
+        plat.size = CGSizeMake((float)self.frame.size.width/5, (float)self.frame.size.height/100);
         plat.zPosition = 100;
         plat.name = @"plat";
         plat.position = [self getRandPos];
         plat.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:plat.frame.size];
-        
         plat.physicsBody.restitution = 0.1f;
         plat.physicsBody.friction = 0.4f;
         plat.physicsBody.dynamic = NO;
@@ -114,7 +117,6 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 // Handle jumps, doublejumps
 - (void)jump{
     if(jumps < 2){
-        SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
         if([charNode.physicsBody velocity].dy < -30.0f){
             [charNode.physicsBody applyImpulse:CGVectorMake(0.0f, 100.0f)];
         }else{[charNode.physicsBody applyImpulse:CGVectorMake(0.0f, 50.0f)];}
@@ -128,46 +130,51 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 -(void)update:(CFTimeInterval)currentTime { // Called before each frame is rendered
     if(!gameEnd){
         [self runParallexBackground];
-    }
-    SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
-    if([charNode.physicsBody velocity].dy > 0.0f){
-        charNode.physicsBody.collisionBitMask = worldCategory;
-    }else{
-        charNode.physicsBody.collisionBitMask = worldCategory|platformCatagory;
-    }
-    if([charNode.physicsBody velocity].dy > 600.0f){
-        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, 600.0f);
-        [charNode.physicsBody setVelocity:tmp];
-    }
-    if([charNode.physicsBody velocity].dy < -350.0f){
-        CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, -350.0f);
-        [charNode.physicsBody setVelocity:tmp];
-    }
-    float leftBound = -self.frame.size.width*.3;
-    float rightBound = 0;
-    if(runningForw){
-        CGVector tmp = CGVectorMake( 150.0f , [charNode.physicsBody velocity].dy);
-        [charNode.physicsBody setVelocity:tmp];
-    }
-    else if([charNode position].x < leftBound){
-        CGVector tmp = CGVectorMake( 70.0f , [charNode.physicsBody velocity].dy);
-        [charNode.physicsBody setVelocity:tmp];
-    }
-    else if([charNode position].x > rightBound){
-        CGVector tmp = CGVectorMake( -65.0f , [charNode.physicsBody velocity].dy);
-        [charNode.physicsBody setVelocity:tmp];
-    }
-    else if([charNode position].x >= -self.frame.size.width*.35 && [charNode position].x <= -self.frame.size.width*.2){
-        CGVector tmp = CGVectorMake( 0.0f , [charNode.physicsBody velocity].dy);
-        [charNode.physicsBody setVelocity:tmp];
-    }
-    [self enumerateChildNodesWithName:@"plat" usingBlock: ^(SKNode *node, BOOL *stop){
-        SKSpriteNode * plat = (SKSpriteNode *) node;
-        plat.position = CGPointMake(plat.position.x - 20, plat.position.y);
-        if (plat.position.x <= -(self.frame.size.width)/2 - plat.frame.size.width) {
-            plat.position = [self getNextPos:plat];
+        if([charNode.physicsBody velocity].dy > 0.0f){
+            charNode.physicsBody.collisionBitMask = worldCategory;
+        }else{
+            charNode.physicsBody.collisionBitMask = worldCategory|platformCatagory;
         }
-    }];
+        if([charNode.physicsBody velocity].dy > 600.0f){
+            CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, 600.0f);
+            [charNode.physicsBody setVelocity:tmp];
+        }
+        if([charNode.physicsBody velocity].dy < -350.0f){
+            CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, -350.0f);
+            [charNode.physicsBody setVelocity:tmp];
+        }
+        float leftBound = -self.frame.size.width*.3;
+        float rightBound = 0;
+        if(runningForw){
+            CGVector tmp = CGVectorMake( 150.0f , [charNode.physicsBody velocity].dy);
+            [charNode.physicsBody setVelocity:tmp];
+        }
+        else if([charNode position].x < leftBound){
+            CGVector tmp = CGVectorMake( 70.0f , [charNode.physicsBody velocity].dy);
+            [charNode.physicsBody setVelocity:tmp];
+        }
+        else if([charNode position].x > rightBound){
+            CGVector tmp = CGVectorMake( -65.0f , [charNode.physicsBody velocity].dy);
+            [charNode.physicsBody setVelocity:tmp];
+        }
+        else if([charNode position].x >= -self.frame.size.width*.35 && [charNode position].x <= -self.frame.size.width*.2){
+            CGVector tmp = CGVectorMake( 0.0f , [charNode.physicsBody velocity].dy);
+            [charNode.physicsBody setVelocity:tmp];
+        }
+        [self enumerateChildNodesWithName:@"plat" usingBlock: ^(SKNode *node, BOOL *stop){
+            SKSpriteNode * plat = (SKSpriteNode *) node;
+            plat.position = CGPointMake(plat.position.x - 20, plat.position.y);
+            if (plat.position.x <= -(self.frame.size.width)/2 - plat.frame.size.width) {
+                plat.position = [self getNextPos:plat];
+            }
+        }];
+    }
+    else{
+        if(!charNode.hasActions){
+            SKTransition *reveal = [SKTransition fadeWithDuration:4.0];
+            [self.view presentScene:[[Universe sharedInstance] gos] transition: reveal];
+        }
+    }
    // NSLog(@"%i\n",jumps);
 
 }//=================================
@@ -177,7 +184,7 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     int random = rand()%4;
     while (random ==0) random = rand()%4;
     int yPos = -self.frame.size.height*.5 + random*levels;
-    int hPos = node.position.x + self.frame.size.width + 2*node.frame.size.width;
+    int hPos = node.position.x + self.frame.size.width + (2 * node.frame.size.width);
     return CGPointMake(hPos, yPos);
 }
 
@@ -264,6 +271,23 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 }
 
 - (void)setupActions { //Sprite set up for character
+    
+    SKTextureAtlas *deadAtlas = [SKTextureAtlas atlasNamed:@"dead"];
+    SKTexture *d1 = [deadAtlas textureNamed:@"sprites_99.png"];
+    SKTexture *d2 = [deadAtlas textureNamed:@"sprites_101.png"];
+    SKTexture *d3 = [deadAtlas textureNamed:@"sprites_102.png"];
+    SKTexture *d4 = [deadAtlas textureNamed:@"sprites_103.png"];
+    SKTexture *d5 = [deadAtlas textureNamed:@"sprites_104.png"];
+    SKTexture *d6 = [deadAtlas textureNamed:@"sprites_105.png"];
+    SKTexture *d7 = [deadAtlas textureNamed:@"sprites_106.png"];
+    SKTexture *d8 = [deadAtlas textureNamed:@"sprites_107.png"];
+    SKTexture *d9 = [deadAtlas textureNamed:@"sprites_108.png"];
+    SKTexture *d10 = [deadAtlas textureNamed:@"sprites_109.png"];
+    SKTexture *d11 = [deadAtlas textureNamed:@"sprites_110.png"];
+    NSArray *deadTextures = @[d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11];
+    
+    deadAnimation = [SKAction animateWithTextures:deadTextures timePerFrame:.1];
+    
     SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"running"];
     SKTexture *runningTex1 = [atlas textureNamed:@"sprites_01.png"];
     SKTexture *runningTex2 = [atlas textureNamed:@"sprites_02.png"];
@@ -303,9 +327,12 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 
 // Touches
 - (void)touchDownAtPoint:(CGPoint)pos {
+    SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
+    if(touchedNode != label){
     //NSLog(@"%@", NSStringFromCGPoint(pos));
-    if(pos.x < 0) [self jump]; //left side of screen tap
-    if(pos.x > 0) runningForw = YES;
+        if(pos.x < 0) [self jump]; //left side of screen tap
+        if(pos.x > 0) runningForw = YES;
+    }
 }
 
 - (void)touchMovedToPoint:(CGPoint)pos {
@@ -316,10 +343,10 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
     if(touchedNode == label && gameEnd == NO){
         [label runAction:[SKAction fadeOutWithDuration:3.0]];
+        [charNode removeAllActions];
         gameEnd = YES;
-        //If start is pressed, shift to next scene
-        SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
-        [self.view presentScene:[[Universe sharedInstance] gos] transition: reveal];
+        [charNode runAction:deadAnimation];
+
     }
     [instructionLabel runAction:[SKAction fadeOutWithDuration:3.0]];
     [instructionLabel1 runAction:[SKAction fadeOutWithDuration:3.0]];

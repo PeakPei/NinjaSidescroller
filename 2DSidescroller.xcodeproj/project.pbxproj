@@ -26,6 +26,9 @@
 		8351AFBF1E66535400651760 /* Layer_0008_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB41E66535400651760 /* Layer_0008_3.png */; };
 		8351AFC01E66535400651760 /* Layer_0009_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB51E66535400651760 /* Layer_0009_2.png */; };
 		8351AFC11E66535400651760 /* Layer_0010_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFB61E66535400651760 /* Layer_0010_1.png */; };
+		8351AFC31E6694D200651760 /* log.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFC21E6694D200651760 /* log.png */; };
+		8351AFC51E66978300651760 /* dead.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFC41E66978300651760 /* dead.atlas */; };
+		8351AFC71E6697E200651760 /* dead.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFC61E6697E200651760 /* dead.atlas */; };
 		83B147881E64016100D673A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B147871E64016100D673A0 /* main.m */; };
 		83B1478B1E64016100D673A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B1478A1E64016100D673A0 /* AppDelegate.m */; };
 		83B1478D1E64016100D673A0 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 83B1478C1E64016100D673A0 /* GameScene.sks */; };
@@ -84,6 +87,9 @@
 		8351AFB41E66535400651760 /* Layer_0008_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0008_3.png; path = "Background layers/Layer_0008_3.png"; sourceTree = "<group>"; };
 		8351AFB51E66535400651760 /* Layer_0009_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0009_2.png; path = "Background layers/Layer_0009_2.png"; sourceTree = "<group>"; };
 		8351AFB61E66535400651760 /* Layer_0010_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Layer_0010_1.png; path = "Background layers/Layer_0010_1.png"; sourceTree = "<group>"; };
+		8351AFC21E6694D200651760 /* log.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = log.png; sourceTree = "<group>"; };
+		8351AFC41E66978300651760 /* dead.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = dead.atlas; sourceTree = "<group>"; };
+		8351AFC61E6697E200651760 /* dead.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = dead.atlas; sourceTree = "<group>"; };
 		83B147831E64016100D673A0 /* 2DSidescroller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2DSidescroller.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83B147871E64016100D673A0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		83B147891E64016100D673A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -145,6 +151,7 @@
 		8351AF9E1E663DFB00651760 /* MountainParallax */ = {
 			isa = PBXGroup;
 			children = (
+				8351AFC41E66978300651760 /* dead.atlas */,
 				8351AF9F1E663DFB00651760 /* parallax-mountain-bg.png */,
 				8351AFA01E663DFB00651760 /* parallax-mountain-foreground-trees.png */,
 				8351AFA11E663DFB00651760 /* parallax-mountain-montain-far.png */,
@@ -214,8 +221,10 @@
 				83B147931E64016100D673A0 /* GameViewController.h */,
 				83B147941E64016100D673A0 /* GameViewController.m */,
 				83B147961E64016100D673A0 /* Main.storyboard */,
+				8351AFC21E6694D200651760 /* log.png */,
 				8351AFAA1E66535400651760 /* ForestParallax */,
 				8351AF9E1E663DFB00651760 /* MountainParallax */,
+				8351AFC61E6697E200651760 /* dead.atlas */,
 				8351AF9C1E64FAE800651760 /* jump.atlas */,
 				8351AF9A1E64CFDE00651760 /* running.atlas */,
 				83B147991E64016100D673A0 /* Assets.xcassets */,
@@ -379,6 +388,7 @@
 				83B147C31E64182600D673A0 /* tempBackground2.jpg in Resources */,
 				8351AF9D1E64FAE800651760 /* jump.atlas in Resources */,
 				8351AFBB1E66535400651760 /* Layer_0004_Lights.png in Resources */,
+				8351AFC31E6694D200651760 /* log.png in Resources */,
 				8351AFA51E663DFB00651760 /* parallax-mountain-foreground-trees.png in Resources */,
 				8351AFBD1E66535400651760 /* Layer_0006_4.png in Resources */,
 				8351AFB71E66535400651760 /* Layer_0000_9.png in Resources */,
@@ -387,9 +397,11 @@
 				83B1479A1E64016100D673A0 /* Assets.xcassets in Resources */,
 				83B1479D1E64016100D673A0 /* LaunchScreen.storyboard in Resources */,
 				8351AFC11E66535400651760 /* Layer_0010_1.png in Resources */,
+				8351AFC51E66978300651760 /* dead.atlas in Resources */,
 				83B147C51E641CF200D673A0 /* tempWallpaper3.png in Resources */,
 				83B1480D1E6494A100D673A0 /* GameOverScene.sks in Resources */,
 				8351AFBF1E66535400651760 /* Layer_0008_3.png in Resources */,
+				8351AFC71E6697E200651760 /* dead.atlas in Resources */,
 				8351AFA61E663DFB00651760 /* parallax-mountain-montain-far.png in Resources */,
 				8351AFBE1E66535400651760 /* Layer_0007_Lights.png in Resources */,
 				83B1478F1E64016100D673A0 /* Actions.sks in Resources */,
