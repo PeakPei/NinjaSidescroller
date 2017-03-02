@@ -12,9 +12,11 @@
 static const uint32_t characterCategory  =  0x1;  // 00000000000000000000000000000001
 static const uint32_t platformCatagory = 0x1 << 1; // 00000000000000000000000000000010
 static const uint32_t worldCategory =  0x1 << 2;  // 00000000000000000000000000000100
+static const uint32_t wallCategory =  0x1 << 3;  // 00000000000000000000000000000100
 
 @implementation GamePlayScene {
     SKLabelNode *label, *instructionLabel, *instructionLabel1;
+    SKShapeNode *throw;
     bool gameEnd;
     SKAction *atlasAnimation;
     SKAction *jumpAnimation, *deadAnimation;
@@ -22,6 +24,8 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     NSArray *bgArr;
     bool runningForw;
     SKSpriteNode *charNode;
+    int enCount;
+    bool firstJump;
 
 }
 
@@ -31,9 +35,12 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     [self makeLabels];
     
     [self makePlatforms];
+    [self makeEnemies];
     gameEnd = NO;
     jumps = 0;
+    enCount = 0;
     runningForw = NO;
+    firstJump = NO;
     
     // Background
     [self setUpParallex];
@@ -53,13 +60,36 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     // Character
     SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
     character.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:character.frame.size];
+    
+    // Set up hitbox for character --
+    CGFloat offsetX = character.frame.size.width * character.anchorPoint.x;
+    CGFloat offsetY = character.frame.size.height * character.anchorPoint.y;
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    
+    CGPathMoveToPoint(path, NULL, 16 - offsetX, 27 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 18 - offsetX, 26 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 20 - offsetX, 23 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 21 - offsetX, 20 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 14 - offsetX, 8 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 5 - offsetX, 0 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 2 - offsetX, 1 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 0 - offsetX, 11 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 6 - offsetX, 25 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 7 - offsetX, 26 - offsetY);
+    
+    CGPathCloseSubpath(path);
+    
+    character.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:path];
+    //done with hitbox
+    
     character.physicsBody.friction = 0.0f;
     character.physicsBody.restitution = 0.0f;
     character.physicsBody.linearDamping = 0.0f;
     character.physicsBody.allowsRotation = NO;
     character.physicsBody.categoryBitMask = characterCategory;
-    character.physicsBody.contactTestBitMask = platformCatagory;
-    character.physicsBody.collisionBitMask = worldCategory|platformCatagory;
+    character.physicsBody.contactTestBitMask = platformCatagory | wallCategory;
+    character.physicsBody.collisionBitMask = worldCategory | platformCatagory;
     charNode = character;
 }
 
@@ -69,19 +99,29 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask){
         firstBody = contact.bodyA;
         secondBody = contact.bodyB;
-    }
-    else{
+    }else{
         firstBody = contact.bodyB;
         secondBody = contact.bodyA;
     }
-        // Collision with platform or world
+    // Collision with platform or world
     if (((firstBody.categoryBitMask & characterCategory) != 0 && (secondBody.categoryBitMask & platformCatagory) != 0 )){
-        NSLog(@"CONTACT Plat\n");
+        //NSLog(@"CONTACT Plat\n");
         SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
-        NSLog(@"%f\n",[character.physicsBody velocity].dy);
+        //NSLog(@"%f\n",[character.physicsBody velocity].dy);
         if([character.physicsBody velocity].dy <= 0.5){
-            NSLog(@"jump reset\n");
+            //NSLog(@"jump reset\n");
             jumps = 0;
+        }
+    }
+    // Collsion with wall
+    else if (((firstBody.categoryBitMask & characterCategory) != 0 &&
+         (secondBody.categoryBitMask & wallCategory) != 0 )){
+        if (firstJump == YES){
+            NSLog(@"Contact");
+            SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
+            [character removeAllActions];
+            [character runAction:deadAnimation];
+            gameEnd = YES;
         }
     }
 }
@@ -94,6 +134,17 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     int hlevels = self.frame.size.width/5;
     int random1 = rand()%7; //add two extra "frames" off screen
     int hPos = -self.frame.size.width * .5 + random1*hlevels;
+    return CGPointMake(hPos, yPos);
+}
+
+-(CGPoint)getRandPos1{
+    int levels = self.frame.size.height/4;
+    int random = rand()%4;
+    while (random == 0) random = rand()%4;
+    int yPos = -self.frame.size.height * .5 + random*levels;
+    int hlevels = self.frame.size.width/5;
+    int random1 = rand()%7; //add two extra "frames" off screen
+    int hPos = self.frame.size.width + random1*hlevels;
     return CGPointMake(hPos, yPos);
 }
 
@@ -110,6 +161,27 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
         plat.physicsBody.dynamic = NO;
         plat.physicsBody.categoryBitMask = platformCatagory;
         [self addChild:plat];
+    }
+    
+}
+
+-(void)makeEnemies{
+    //for(int i = 0; i<3 ; i++){
+    if(enCount < 3){
+        SKSpriteNode *plat = [SKSpriteNode spriteNodeWithImageNamed:@"logv.png"];
+        plat.size = CGSizeMake((float)self.frame.size.width/50, (float)self.frame.size.height/4);
+        plat.zPosition = 99;
+        plat.name = @"en";
+        CGPoint a = [self getRandPos1];
+        a =  CGPointMake(a.x, a.y - plat.size.height/2);
+        plat.position = a;
+        plat.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:plat.frame.size];
+        plat.physicsBody.restitution = 0.0f;
+        plat.physicsBody.friction = 0.4f;
+        plat.physicsBody.dynamic = NO;
+        plat.physicsBody.categoryBitMask = wallCategory;
+        [self addChild:plat];
+        enCount += 1;
     }
     
 }
@@ -168,6 +240,17 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
                 plat.position = [self getNextPos:plat];
             }
         }];
+        [self enumerateChildNodesWithName:@"en" usingBlock: ^(SKNode *node, BOOL *stop){
+            SKSpriteNode * plat = (SKSpriteNode *) node;
+            plat.position = CGPointMake(plat.position.x - 20, plat.position.y);
+            if (plat.position.x <= -(self.frame.size.width)/2 - plat.frame.size.width) {
+                NSArray *tmp = @[plat];
+                [self removeChildrenInArray:tmp];
+                NSLog(@"removed\n");
+                enCount--;
+            }
+        }];
+        if(rand()%50<25){[self makeEnemies]; }
     }
     else{
         if(!charNode.hasActions){
@@ -204,13 +287,18 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 
 -(void)setUpParallex{ //Set up parallex background
     
+    //Temp, non parallax background so I can test with high fps
+    bgArr = @[
+              @"tempWallpaper3.png",
+              ];
+    /*
     bgArr = @[
               @"parallax-mountain-bg.png",
               @"parallax-mountain-montain-far.png",
               @"parallax-mountain-mountains.png",
               @"parallax-mountain-foreground-trees.png",
               @"parallax-mountain-trees.png"
-              ];
+              ];*/
     /*bgArr = @[
      @"Layer_0010_1.png",
      @"Layer_0009_2.png",
@@ -251,6 +339,14 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     label.alpha = 0.0;
     [self addChild:label];
     [label runAction:[SKAction fadeInWithDuration:2.0]];
+    
+    throw = [SKShapeNode shapeNodeWithCircleOfRadius:self.frame.size.width*.05];
+    throw.fillColor = [SKColor whiteColor];
+    throw.position = CGPointMake(self.frame.size.width*.35, -self.frame.size.height*.35);
+    throw.name = @"throw";
+    throw.zPosition = 200;
+    [self addChild:throw];
+    [throw runAction:[SKAction fadeInWithDuration:2.0]];
     
     instructionLabel =[SKLabelNode labelNodeWithFontNamed:@"BradleyHandITCTT-Bold"];
     instructionLabel.text = @"Tap left side to jump or double jump";
@@ -299,9 +395,9 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
     
     atlasAnimation = [SKAction animateWithTextures:atlasTextures timePerFrame:.1];
     
-    SKSpriteNode *charNode = (SKSpriteNode*)[self childNodeWithName:@"character"];
+    SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
     SKAction *repeatRun = [SKAction repeatActionForever:atlasAnimation ];
-    [charNode runAction:repeatRun withKey:@"foreverAction"];
+    [character runAction:repeatRun withKey:@"foreverAction"];
     
     SKTextureAtlas *jumpAtlas = [SKTextureAtlas atlasNamed:@"jump"];
     SKTexture *jumpTex1 = [jumpAtlas textureNamed:@"sprites_91.png"];
@@ -328,10 +424,14 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 // Touches
 - (void)touchDownAtPoint:(CGPoint)pos {
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
+    SKShapeNode *touchedNode1 = (SKShapeNode *)[self nodeAtPoint:pos];
+    firstJump = YES;
     if(touchedNode != label){
     //NSLog(@"%@", NSStringFromCGPoint(pos));
         if(pos.x < 0) [self jump]; //left side of screen tap
         if(pos.x > 0) runningForw = YES;
+    }else if(touchedNode1 == throw){
+        NSLog(@"Throw\n");
     }
 }
 
