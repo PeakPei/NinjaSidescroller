@@ -31,6 +31,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 
 - (void)didMoveToView:(SKView *)view {
     [self removeAllChildren];
+    
     // Setup your scene here
     [self makeLabels];
     [self makePlatforms];
@@ -51,7 +52,6 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     // Physics
     self.physicsWorld.gravity = CGVectorMake(0.0f, -9.8f);
     self.physicsWorld.contactDelegate = self; //set up world for collisions
-    //self.physicsBody.categoryBitMask = worldCategory;
     // Walls
     SKPhysicsBody* borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
     self.physicsBody = borderBody;
@@ -60,7 +60,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
     character.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:character.frame.size];
     
-    // Set up hitbox for character --
+    //--Set up hitbox for character --
     CGFloat offsetX = character.frame.size.width * character.anchorPoint.x;
     CGFloat offsetY = character.frame.size.height * character.anchorPoint.y;
     
@@ -80,7 +80,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     CGPathCloseSubpath(path);
     
     character.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:path];
-    //done with hitbox
+    //--Done with hitbox--
     
     character.physicsBody.friction = 0.0f;
     character.physicsBody.restitution = 0.0f;
@@ -94,6 +94,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 
 - (void)didBeginContact:(SKPhysicsContact *)contact
 {
+    //Sort so that A is smaller than B
     SKPhysicsBody *firstBody, *secondBody;
     if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask){
         firstBody = contact.bodyA;
@@ -104,11 +105,8 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     }
     // Collision with platform or world
     if (((firstBody.categoryBitMask & characterCategory) != 0 && (secondBody.categoryBitMask & platformCatagory) != 0 )){
-        //NSLog(@"CONTACT Plat\n");
         SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
-        //NSLog(@"%f\n",[character.physicsBody velocity].dy);
         if([character.physicsBody velocity].dy <= 0.5){
-            //NSLog(@"jump reset\n");
             jumps = 0;
         }
     }
@@ -125,27 +123,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     }
 }
 
--(CGPoint)getRandPos{
-    int levels = self.frame.size.height/4;
-    int random = rand()%4;
-    while (random == 0) random = rand()%4;
-    int yPos = -self.frame.size.height * .5 + random*levels;
-    int hlevels = self.frame.size.width/5;
-    int random1 = rand()%7; //add two extra "frames" off screen
-    int hPos = -self.frame.size.width * .5 + random1*hlevels;
-    return CGPointMake(hPos, yPos);
-}
-
--(CGPoint)getRandPos1{
-    int levels = self.frame.size.height/8;
-    int random = rand()%8;
-    //while (random == 0) random = rand()%8;
-    int yPos = -self.frame.size.height * .5 + random*levels;
-    int hlevels = self.frame.size.width/5;
-    int random1 = rand()%7; //add two extra "frames" off screen
-    int hPos = self.frame.size.width + random1*hlevels;
-    return CGPointMake(hPos, yPos);
-}
+//============= Generate On Screen Objects =================
 
 -(void)makePlatforms{
     for(int i = 0; i<10 ; i++){
@@ -165,7 +143,6 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 }
 
 -(void)makeEnemies{
-    //for(int i = 0; i<3 ; i++){
     if(enCount < 6){
         SKSpriteNode *plat = [SKSpriteNode spriteNodeWithImageNamed:@"logv.png"];
         plat.size = CGSizeMake((float)self.frame.size.width/50, (float)self.frame.size.height/8);
@@ -185,7 +162,8 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     
 }
 
-// Handle jumps, doublejumps
+//============= Player Control =================
+
 - (void)jump{
     if(jumps < 2){
         if([charNode.physicsBody velocity].dy < -30.0f){
@@ -197,15 +175,17 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 }
 
 
-// =========== GAME LOOP ===========
+//============= Game Loop =================
 -(void)update:(CFTimeInterval)currentTime { // Called before each frame is rendered
     if(!gameEnd){
-        [self runParallexBackground];
+        [self runParallexBackground]; // move parallax background
+        //Check if jumping, allow for jumping through platforms
         if([charNode.physicsBody velocity].dy > 0.0f){
             charNode.physicsBody.collisionBitMask = worldCategory;
         }else{
             charNode.physicsBody.collisionBitMask = worldCategory|platformCatagory;
         }
+        //Set max +/- vertical velocities
         if([charNode.physicsBody velocity].dy > 600.0f){
             CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, 600.0f);
             [charNode.physicsBody setVelocity:tmp];
@@ -214,24 +194,30 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
             CGVector tmp = CGVectorMake([charNode.physicsBody velocity].dx, -350.0f);
             [charNode.physicsBody setVelocity:tmp];
         }
+        //Return character to similar part of screen every time
         float leftBound = -self.frame.size.width*.3;
         float rightBound = 0;
+        //Allow for char to run fow without pushing back to original position
         if(runningForw){
             CGVector tmp = CGVectorMake( 150.0f , [charNode.physicsBody velocity].dy);
             [charNode.physicsBody setVelocity:tmp];
         }
+        //Push char left
         else if([charNode position].x < leftBound){
             CGVector tmp = CGVectorMake( 70.0f , [charNode.physicsBody velocity].dy);
             [charNode.physicsBody setVelocity:tmp];
         }
+        //Push char right
         else if([charNode position].x > rightBound){
             CGVector tmp = CGVectorMake( -65.0f , [charNode.physicsBody velocity].dy);
             [charNode.physicsBody setVelocity:tmp];
         }
+        //Keep char in place
         else if([charNode position].x >= -self.frame.size.width*.35 && [charNode position].x <= -self.frame.size.width*.2){
             CGVector tmp = CGVectorMake( 0.0f , [charNode.physicsBody velocity].dy);
             [charNode.physicsBody setVelocity:tmp];
         }
+        //Platform movement
         [self enumerateChildNodesWithName:@"plat" usingBlock: ^(SKNode *node, BOOL *stop){
             SKSpriteNode * plat = (SKSpriteNode *) node;
             plat.position = CGPointMake(plat.position.x - 20, plat.position.y);
@@ -239,6 +225,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
                 plat.position = [self getNextPos:plat];
             }
         }];
+        //Wall movements
         [self enumerateChildNodesWithName:@"en" usingBlock: ^(SKNode *node, BOOL *stop){
             SKSpriteNode * plat = (SKSpriteNode *) node;
             plat.position = CGPointMake(plat.position.x - 20, plat.position.y);
@@ -249,26 +236,19 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
                 enCount--;
             }
         }];
+        //randomly generate enemies/walls
         if(rand()%50<25){[self makeEnemies]; }
     }
     else{
         if(!charNode.hasActions){
+            //Make transition to game over
             SKTransition *reveal = [SKTransition fadeWithDuration:4.0];
             [self.view presentScene:[[Universe sharedInstance] gos] transition: reveal];
         }
     }
-   // NSLog(@"%i\n",jumps);
-
-}//=================================
-
--(CGPoint)getNextPos: (SKNode*) node{
-    int levels = self.frame.size.height/4;
-    int random = rand()%4;
-    while (random ==0) random = rand()%4;
-    int yPos = -self.frame.size.height*.5 + random*levels;
-    int hPos = node.position.x + self.frame.size.width + (2 * node.frame.size.width);
-    return CGPointMake(hPos, yPos);
 }
+
+//=============Setup and helper functions=================
 
 -(void)runParallexBackground{
     for(int i=1; i < bgArr.count; i++){
@@ -285,19 +265,16 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 }
 
 -(void)setUpParallex{ //Set up parallex background
-    
-    //Temp, non parallax background so I can test with high fps
     NSArray *bgArr0 = @[
-              @"tempWallpaper3.png",
-              ];
-    
+        @"tempWallpaper3.png"
+    ];
     NSArray *bgArr1 = @[
-              @"parallax-mountain-bg.png",
-              @"parallax-mountain-montain-far.png",
-              @"parallax-mountain-mountains.png",
-              @"parallax-mountain-foreground-trees.png",
-              @"parallax-mountain-trees.png"
-              ];
+        @"parallax-mountain-bg.png",
+        @"parallax-mountain-montain-far.png",
+        @"parallax-mountain-mountains.png",
+        @"parallax-mountain-foreground-trees.png",
+        @"parallax-mountain-trees.png"
+    ];
      NSArray *bgArr2 = @[
          @"Layer_0010_1.png",
          @"Layer_0009_2.png",
@@ -311,7 +288,9 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
          @"Layer_0001_8.png",
          @"Layer_0000_9.png"
      ];
+    
     NSArray *bgList = @[bgArr0,bgArr1,bgArr2];
+    
     bgArr = bgList[[[Universe sharedInstance] bg]];
     
     for (int j = 0; j < bgArr.count; j++){
@@ -432,7 +411,38 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     return character;
 }
 
-// Touches
+-(CGPoint)getRandPos{
+    int levels = self.frame.size.height/4;
+    int random = rand()%4;
+    while (random == 0) random = rand()%4;
+    int yPos = -self.frame.size.height * .5 + random*levels;
+    int hlevels = self.frame.size.width/5;
+    int random1 = rand()%7; //add two extra "frames" off screen
+    int hPos = -self.frame.size.width * .5 + random1*hlevels;
+    return CGPointMake(hPos, yPos);
+}
+
+-(CGPoint)getRandPos1{
+    int levels = self.frame.size.height/8;
+    int random = rand()%8;
+    int yPos = -self.frame.size.height * .5 + random*levels;
+    int hlevels = self.frame.size.width/5;
+    int random1 = rand()%7; //add two extra "frames" off screen
+    int hPos = self.frame.size.width + random1*hlevels;//create them off screen on the right
+    return CGPointMake(hPos, yPos);
+}
+
+-(CGPoint)getNextPos: (SKNode*) node{
+    int levels = self.frame.size.height/4;
+    int random = rand()%4;
+    while (random ==0) random = rand()%4;
+    int yPos = -self.frame.size.height*.5 + random*levels;
+    int hPos = node.position.x + self.frame.size.width + (2 * node.frame.size.width);
+    return CGPointMake(hPos, yPos);
+}
+
+//============= Touches =================
+
 - (void)touchDownAtPoint:(CGPoint)pos {
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
     SKShapeNode *touchedNode1 = (SKShapeNode *)[self nodeAtPoint:pos];
@@ -470,7 +480,6 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    // Run 'Pulse' action from 'Actions.sks'
     for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{

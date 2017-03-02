@@ -10,4 +10,6 @@
 
 @interface GamePlayScene : SKScene<SKPhysicsContactDelegate>
 
+- (void)didBeginContact:(SKPhysicsContact *)contact;
+
 @end

@@ -58,19 +58,16 @@
 - (void)touchUpAtPoint:(CGPoint)pos {
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
     if(touchedNode == label && gameStart == NO){
-        [label runAction:[SKAction fadeOutWithDuration:2.0]];
         gameStart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [[Universe sharedInstance] setBg:0];
         [self.view presentScene:[[Universe sharedInstance] gps] transition: reveal];
     }else if(touchedNode == label1 && gameStart == NO){
-        [label1 runAction:[SKAction fadeOutWithDuration:2.0]];
         gameStart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [[Universe sharedInstance] setBg:1];
         [self.view presentScene:[[Universe sharedInstance] gps] transition: reveal];
     }else if(touchedNode == label2 && gameStart == NO){
-        [label2 runAction:[SKAction fadeOutWithDuration:2.0]];
         gameStart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [[Universe sharedInstance] setBg:2];

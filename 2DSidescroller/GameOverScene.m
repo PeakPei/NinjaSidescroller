@@ -38,35 +38,24 @@
 }
 
 - (void)touchUpAtPoint:(CGPoint)pos {
-    //SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
     if(gameRestart == NO){
-        //[label runAction:[SKAction fadeOutWithDuration:2.0]];
-        NSLog(@"GameOver pressed");
         gameRestart = YES;
-        //If start is pressed, shift to next scene
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [self.view presentScene:[[Universe sharedInstance] gs] transition: reveal];
     }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    // Run 'Pulse' action from 'Actions.sks'
-    //label.hidden = YES;
-    
-    //for (UITouch *t in touches) {[self touchDownAtPoint:[t locationInNode:self]];}
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-    //for (UITouch *t in touches) {[self touchMovedToPoint:[t locationInNode:self]];}
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    //for (UITouch *t in touches) {[self touchUpAtPoint:[t locationInNode:self]];}
 }
 
 -(void)update:(CFTimeInterval)currentTime {
-    // Called before each frame is rendered
 }
 
 @end
