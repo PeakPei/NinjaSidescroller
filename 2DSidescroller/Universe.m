@@ -12,7 +12,8 @@
 @synthesize score, highscore;
 @synthesize lives;
 @synthesize lost;
-@synthesize gs, gos;
+@synthesize gs, gos, bss;
+@synthesize bg;
 
 static Universe *singleton = nil;
 

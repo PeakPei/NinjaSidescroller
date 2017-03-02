@@ -15,7 +15,7 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 static const uint32_t wallCategory =  0x1 << 3;  // 00000000000000000000000000000100
 
 @implementation GamePlayScene {
-    SKLabelNode *label, *instructionLabel, *instructionLabel1;
+    SKLabelNode *label, *instructionLabel, *instructionLabel1, *instructionLabel2;
     SKShapeNode *throw;
     bool gameEnd;
     SKAction *atlasAnimation;
@@ -33,7 +33,6 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     [self removeAllChildren];
     // Setup your scene here
     [self makeLabels];
-    
     [self makePlatforms];
     [self makeEnemies];
     gameEnd = NO;
@@ -138,9 +137,9 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 }
 
 -(CGPoint)getRandPos1{
-    int levels = self.frame.size.height/4;
-    int random = rand()%4;
-    while (random == 0) random = rand()%4;
+    int levels = self.frame.size.height/8;
+    int random = rand()%8;
+    //while (random == 0) random = rand()%8;
     int yPos = -self.frame.size.height * .5 + random*levels;
     int hlevels = self.frame.size.width/5;
     int random1 = rand()%7; //add two extra "frames" off screen
@@ -167,9 +166,9 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 
 -(void)makeEnemies{
     //for(int i = 0; i<3 ; i++){
-    if(enCount < 3){
+    if(enCount < 6){
         SKSpriteNode *plat = [SKSpriteNode spriteNodeWithImageNamed:@"logv.png"];
-        plat.size = CGSizeMake((float)self.frame.size.width/50, (float)self.frame.size.height/4);
+        plat.size = CGSizeMake((float)self.frame.size.width/50, (float)self.frame.size.height/8);
         plat.zPosition = 99;
         plat.name = @"en";
         CGPoint a = [self getRandPos1];
@@ -288,30 +287,33 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 -(void)setUpParallex{ //Set up parallex background
     
     //Temp, non parallax background so I can test with high fps
-    bgArr = @[
+    NSArray *bgArr0 = @[
               @"tempWallpaper3.png",
               ];
-    /*
-    bgArr = @[
+    
+    NSArray *bgArr1 = @[
               @"parallax-mountain-bg.png",
               @"parallax-mountain-montain-far.png",
               @"parallax-mountain-mountains.png",
               @"parallax-mountain-foreground-trees.png",
               @"parallax-mountain-trees.png"
-              ];*/
-    /*bgArr = @[
-     @"Layer_0010_1.png",
-     @"Layer_0009_2.png",
-     @"Layer_0008_3.png",
-     @"Layer_0007_Lights.png",
-     @"Layer_0006_4.png",
-     @"Layer_0005_5.png",
-     @"Layer_0004_Lights.png",
-     @"Layer_0003_6.png",
-     @"Layer_0002_7.png",
-     @"Layer_0001_8.png",
-     @"Layer_0000_9.png"
-     ];*/
+              ];
+     NSArray *bgArr2 = @[
+         @"Layer_0010_1.png",
+         @"Layer_0009_2.png",
+         @"Layer_0008_3.png",
+         @"Layer_0007_Lights.png",
+         @"Layer_0006_4.png",
+         @"Layer_0005_5.png",
+         @"Layer_0004_Lights.png",
+         @"Layer_0003_6.png",
+         @"Layer_0002_7.png",
+         @"Layer_0001_8.png",
+         @"Layer_0000_9.png"
+     ];
+    NSArray *bgList = @[bgArr0,bgArr1,bgArr2];
+    bgArr = bgList[[[Universe sharedInstance] bg]];
+    
     for (int j = 0; j < bgArr.count; j++){
         for(int i = 0; i < 2; i++){
             SKSpriteNode * bg1 =[SKSpriteNode spriteNodeWithImageNamed:bgArr[j]];
@@ -340,13 +342,13 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     [self addChild:label];
     [label runAction:[SKAction fadeInWithDuration:2.0]];
     
-    throw = [SKShapeNode shapeNodeWithCircleOfRadius:self.frame.size.width*.05];
+    /* throw = [SKShapeNode shapeNodeWithCircleOfRadius:self.frame.size.width*.05];
     throw.fillColor = [SKColor whiteColor];
     throw.position = CGPointMake(self.frame.size.width*.35, -self.frame.size.height*.35);
     throw.name = @"throw";
     throw.zPosition = 200;
     [self addChild:throw];
-    [throw runAction:[SKAction fadeInWithDuration:2.0]];
+    [throw runAction:[SKAction fadeInWithDuration:2.0]];*/
     
     instructionLabel =[SKLabelNode labelNodeWithFontNamed:@"BradleyHandITCTT-Bold"];
     instructionLabel.text = @"Tap left side to jump or double jump";
@@ -364,6 +366,15 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     instructionLabel1.zPosition = 200;
     [self addChild:instructionLabel1];
     [instructionLabel1 runAction:[SKAction fadeInWithDuration:2.0]];
+    
+    instructionLabel2 =[SKLabelNode labelNodeWithFontNamed:@"BradleyHandITCTT-Bold"];
+    instructionLabel2.text = @"Avoid walls";
+    instructionLabel2.fontSize = 20;
+    instructionLabel2.name = @"instructionLabel";
+    instructionLabel2.position = CGPointMake(0,-40);
+    instructionLabel2.zPosition = 200;
+    [self addChild:instructionLabel2];
+    [instructionLabel2 runAction:[SKAction fadeInWithDuration:2.0]];
 }
 
 - (void)setupActions { //Sprite set up for character
@@ -382,7 +393,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     SKTexture *d11 = [deadAtlas textureNamed:@"sprites_110.png"];
     NSArray *deadTextures = @[d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11];
     
-    deadAnimation = [SKAction animateWithTextures:deadTextures timePerFrame:.1];
+    deadAnimation = [SKAction animateWithTextures:deadTextures timePerFrame:.1 resize:YES restore:NO];
     
     SKTextureAtlas *atlas = [SKTextureAtlas atlasNamed:@"running"];
     SKTexture *runningTex1 = [atlas textureNamed:@"sprites_01.png"];
@@ -448,9 +459,14 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
         [charNode runAction:deadAnimation];
 
     }
+    [self fadeOutInstLabels];
+    runningForw = NO;
+}
+
+- (void) fadeOutInstLabels{
     [instructionLabel runAction:[SKAction fadeOutWithDuration:3.0]];
     [instructionLabel1 runAction:[SKAction fadeOutWithDuration:3.0]];
-    runningForw = NO;
+    [instructionLabel2 runAction:[SKAction fadeOutWithDuration:3.0]];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

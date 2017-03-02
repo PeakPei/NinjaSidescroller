@@ -29,6 +29,8 @@
 		8351AFC31E6694D200651760 /* log.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFC21E6694D200651760 /* log.png */; };
 		8351AFC71E6697E200651760 /* dead.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFC61E6697E200651760 /* dead.atlas */; };
 		8351AFC91E68920600651760 /* logv.png in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFC81E68920600651760 /* logv.png */; };
+		8351AFCB1E68CF2400651760 /* BgSelectScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8351AFCA1E68CF2400651760 /* BgSelectScene.sks */; };
+		8351AFCE1E68CF6100651760 /* BgSelectScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 8351AFCD1E68CF6100651760 /* BgSelectScene.m */; };
 		83B147881E64016100D673A0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B147871E64016100D673A0 /* main.m */; };
 		83B1478B1E64016100D673A0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 83B1478A1E64016100D673A0 /* AppDelegate.m */; };
 		83B1478D1E64016100D673A0 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 83B1478C1E64016100D673A0 /* GameScene.sks */; };
@@ -90,6 +92,9 @@
 		8351AFC21E6694D200651760 /* log.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = log.png; sourceTree = "<group>"; };
 		8351AFC61E6697E200651760 /* dead.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = dead.atlas; sourceTree = "<group>"; };
 		8351AFC81E68920600651760 /* logv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logv.png; sourceTree = "<group>"; };
+		8351AFCA1E68CF2400651760 /* BgSelectScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BgSelectScene.sks; sourceTree = "<group>"; };
+		8351AFCC1E68CF6100651760 /* BgSelectScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BgSelectScene.h; sourceTree = "<group>"; };
+		8351AFCD1E68CF6100651760 /* BgSelectScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BgSelectScene.m; sourceTree = "<group>"; };
 		83B147831E64016100D673A0 /* 2DSidescroller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2DSidescroller.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83B147871E64016100D673A0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		83B147891E64016100D673A0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -209,12 +214,15 @@
 				83B1478E1E64016100D673A0 /* Actions.sks */,
 				83B147901E64016100D673A0 /* GameScene.h */,
 				83B147911E64016100D673A0 /* GameScene.m */,
-				83B1480C1E6494A000D673A0 /* GameOverScene.sks */,
-				83B1480E1E6494EE00D673A0 /* GameOverScene.h */,
-				83B1480F1E6494EE00D673A0 /* GameOverScene.m */,
+				8351AFCA1E68CF2400651760 /* BgSelectScene.sks */,
+				8351AFCC1E68CF6100651760 /* BgSelectScene.h */,
+				8351AFCD1E68CF6100651760 /* BgSelectScene.m */,
 				83B148171E64A50C00D673A0 /* GamePlayScene.sks */,
 				83B148141E64A4E700D673A0 /* GamePlayScene.h */,
 				83B148151E64A4E800D673A0 /* GamePlayScene.m */,
+				83B1480C1E6494A000D673A0 /* GameOverScene.sks */,
+				83B1480E1E6494EE00D673A0 /* GameOverScene.h */,
+				83B1480F1E6494EE00D673A0 /* GameOverScene.m */,
 				83B148111E6498C900D673A0 /* Universe.h */,
 				83B148121E6498C900D673A0 /* Universe.m */,
 				83B147931E64016100D673A0 /* GameViewController.h */,
@@ -379,6 +387,7 @@
 				8351AFA71E663DFB00651760 /* parallax-mountain-mountains.png in Resources */,
 				83B148181E64A50C00D673A0 /* GamePlayScene.sks in Resources */,
 				8351AFBA1E66535400651760 /* Layer_0003_6.png in Resources */,
+				8351AFCB1E68CF2400651760 /* BgSelectScene.sks in Resources */,
 				83B1478D1E64016100D673A0 /* GameScene.sks in Resources */,
 				83B147C11E640A8300D673A0 /* tempBackground1.jpg in Resources */,
 				8351AF991E64CE2700651760 /* sprites_base.png in Resources */,
@@ -431,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83B148161E64A4E800D673A0 /* GamePlayScene.m in Sources */,
+				8351AFCE1E68CF6100651760 /* BgSelectScene.m in Sources */,
 				83B148101E6494EE00D673A0 /* GameOverScene.m in Sources */,
 				83B147951E64016100D673A0 /* GameViewController.m in Sources */,
 				83B1478B1E64016100D673A0 /* AppDelegate.m in Sources */,

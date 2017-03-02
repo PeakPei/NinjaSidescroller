@@ -7,8 +7,7 @@
 //
 
 #import "GameViewController.h"
-#import "GameScene.h"
-#import "GameOverScene.h"
+
 
 @implementation GameViewController
 
@@ -19,6 +18,7 @@
     GameScene *scene = (GameScene *)[SKScene nodeWithFileNamed:@"GameScene"];
     GameOverScene *scene1 = (GameOverScene *)[SKScene nodeWithFileNamed:@"GameOverScene"];
     GamePlayScene *scene2 = (GamePlayScene *)[SKScene nodeWithFileNamed:@"GamePlayScene"];
+    BgSelectScene *scene3 = (BgSelectScene *)[SKScene nodeWithFileNamed:@"BgSelectScene"];
     
     // Set the scale mode to scale to fit the window
     scene.scaleMode = SKSceneScaleModeResizeFill;
@@ -29,6 +29,7 @@
     [[Universe sharedInstance] setGs:scene];
     [[Universe sharedInstance] setGos:scene1];
     [[Universe sharedInstance] setGps:scene2];
+    [[Universe sharedInstance] setBss:scene3];
     
     // Present the scene
     [skView presentScene:scene];

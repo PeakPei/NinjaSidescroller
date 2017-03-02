@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "GameScene.h"
 #import "GameOverScene.h"
+#import "BgSelectScene.h"
 #import "GamePlayScene.h"
 
 @interface Universe : NSObject{}
@@ -22,6 +23,8 @@
 @property (nonatomic) GameScene *gs;
 @property (nonatomic) GameOverScene *gos;
 @property (nonatomic) GamePlayScene *gps;
+@property (nonatomic) BgSelectScene *bss;
+@property (nonatomic) int bg;
 
 -(void)saveState;
 -(void)loadState;

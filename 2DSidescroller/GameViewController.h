@@ -10,6 +10,10 @@
 #import <SpriteKit/SpriteKit.h>
 #import <GameplayKit/GameplayKit.h>
 #import "Universe.h"
+#import "GameScene.h"
+#import "GameOverScene.h"
+#import "BgSelectScene.h"
+#import "GamePlayScene.h"
 
 @interface GameViewController : UIViewController{
 }
