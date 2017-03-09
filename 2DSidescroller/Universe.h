@@ -20,11 +20,14 @@
 @property (nonatomic) int highscore;
 @property (nonatomic) int lives;
 @property (nonatomic) bool lost;
-@property (nonatomic) GameScene *gs;
-@property (nonatomic) GameOverScene *gos;
-@property (nonatomic) GamePlayScene *gps;
-@property (nonatomic) BgSelectScene *bss;
+
 @property (nonatomic) int bg;
+
+
+-(GameScene *)getGs;
+-(GameOverScene *)getGos;
+-(GamePlayScene *)getGps;
+-(BgSelectScene *)getBss;
 
 -(void)saveState;
 -(void)loadState;

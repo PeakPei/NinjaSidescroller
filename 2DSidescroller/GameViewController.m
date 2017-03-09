@@ -15,21 +15,12 @@
     [super viewDidLoad];
 
     // Load the SKScene from 'GameScene.sks'
-    GameScene *scene = (GameScene *)[SKScene nodeWithFileNamed:@"GameScene"];
-    GameOverScene *scene1 = (GameOverScene *)[SKScene nodeWithFileNamed:@"GameOverScene"];
-    GamePlayScene *scene2 = (GamePlayScene *)[SKScene nodeWithFileNamed:@"GamePlayScene"];
-    BgSelectScene *scene3 = (BgSelectScene *)[SKScene nodeWithFileNamed:@"BgSelectScene"];
+    GameScene *scene = [[Universe sharedInstance]getGs];
     
     // Set the scale mode to scale to fit the window
     scene.scaleMode = SKSceneScaleModeResizeFill;
     
     SKView *skView = (SKView *)self.view;
-    
-    //Init Singleton Universe with scenes
-    [[Universe sharedInstance] setGs:scene];
-    [[Universe sharedInstance] setGos:scene1];
-    [[Universe sharedInstance] setGps:scene2];
-    [[Universe sharedInstance] setBss:scene3];
     
     // Present the scene
     [skView presentScene:scene];

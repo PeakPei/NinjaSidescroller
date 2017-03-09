@@ -61,17 +61,17 @@
         gameStart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [[Universe sharedInstance] setBg:0];
-        [self.view presentScene:[[Universe sharedInstance] gps] transition: reveal];
+        [self.view presentScene:[[Universe sharedInstance] getGps] transition: reveal];
     }else if(touchedNode == label1 && gameStart == NO){
         gameStart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [[Universe sharedInstance] setBg:1];
-        [self.view presentScene:[[Universe sharedInstance] gps] transition: reveal];
+        [self.view presentScene:[[Universe sharedInstance] getGps] transition: reveal];
     }else if(touchedNode == label2 && gameStart == NO){
         gameStart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         [[Universe sharedInstance] setBg:2];
-        [self.view presentScene:[[Universe sharedInstance] gps] transition: reveal];
+        [self.view presentScene:[[Universe sharedInstance] getGps] transition: reveal];
     }
 }
 

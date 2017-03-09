@@ -12,10 +12,13 @@
 @synthesize score, highscore;
 @synthesize lives;
 @synthesize lost;
-@synthesize gs, gos, bss;
 @synthesize bg;
 
 static Universe *singleton = nil;
+static GameScene *gs = nil;
+static GameOverScene *gos = nil;
+static BgSelectScene *bss = nil;
+static GamePlayScene *gps = nil;
 
 
 -(id)init
@@ -37,6 +40,34 @@ static Universe *singleton = nil;
         return singleton;
     
     return [[Universe alloc] init];
+}
+
+-(GameScene *)getGs{
+    if (gs)
+        return gs;
+    else gs = (GameScene *)[SKScene nodeWithFileNamed:@"GameScene"];
+    return gs;
+}
+
+-(GameOverScene *)getGos{
+    if (gos)
+        return gos;
+    else gos = (GameOverScene *)[SKScene nodeWithFileNamed:@"GameOverScene"];
+    return gos;
+}
+
+-(GamePlayScene *)getGps{
+    if (gps)
+        return gps;
+    else gps = (GamePlayScene *)[SKScene nodeWithFileNamed:@"GamePlayScene"];
+    return gps;
+}
+
+-(BgSelectScene *)getBss{
+    if (bss)
+        return bss;
+    else bss = (BgSelectScene *)[SKScene nodeWithFileNamed:@"BgSelectScene"];
+    return bss;
 }
 
 -(void)saveState

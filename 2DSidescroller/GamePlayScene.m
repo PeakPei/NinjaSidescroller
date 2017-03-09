@@ -26,7 +26,8 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     SKSpriteNode *charNode;
     int enCount;
     bool firstJump;
-
+    float cT;
+    bool gameStart;
 }
 
 - (void)didMoveToView:(SKView *)view {
@@ -41,6 +42,8 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     enCount = 0;
     runningForw = NO;
     firstJump = NO;
+    cT = 0.0;
+    gameStart = NO;
     
     // Background
     [self setUpParallex];
@@ -114,7 +117,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     else if (((firstBody.categoryBitMask & characterCategory) != 0 &&
          (secondBody.categoryBitMask & wallCategory) != 0 )){
         if (firstJump == YES){
-            NSLog(@"Contact");
+            //NSLog(@"Contact");
             SKSpriteNode *character = (SKSpriteNode*)[self childNodeWithName:@"character"];
             [character removeAllActions];
             [character runAction:deadAnimation];
@@ -178,6 +181,11 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 //============= Game Loop =================
 -(void)update:(CFTimeInterval)currentTime { // Called before each frame is rendered
     if(!gameEnd){
+        if(cT < .01 && gameStart) {
+            cT = (int)currentTime;
+        }
+        if (gameStart)[[Universe sharedInstance] setScore:(int)(currentTime-cT)];
+        //NSLog(@"score:%i, %f",[[Universe sharedInstance] score],cT);
         [self runParallexBackground]; // move parallax background
         //Check if jumping, allow for jumping through platforms
         if([charNode.physicsBody velocity].dy > 0.0f){
@@ -232,7 +240,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
             if (plat.position.x <= -(self.frame.size.width)/2 - plat.frame.size.width) {
                 NSArray *tmp = @[plat];
                 [self removeChildrenInArray:tmp];
-                NSLog(@"removed\n");
+                //NSLog(@"removed\n");
                 enCount--;
             }
         }];
@@ -243,7 +251,11 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
         if(!charNode.hasActions){
             //Make transition to game over
             SKTransition *reveal = [SKTransition fadeWithDuration:4.0];
-            [self.view presentScene:[[Universe sharedInstance] gos] transition: reveal];
+            [self.view presentScene:[[Universe sharedInstance] getGos] transition: reveal];
+            if([[Universe sharedInstance] highscore] < [[Universe sharedInstance] score]){
+                [[Universe sharedInstance] setHighscore:[[Universe sharedInstance] score]];
+            }
+            [[Universe sharedInstance] setScore:0];
         }
     }
 }
@@ -444,15 +456,15 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 //============= Touches =================
 
 - (void)touchDownAtPoint:(CGPoint)pos {
+    if (gameStart == NO){
+        gameStart = YES;
+    }
     SKLabelNode *touchedNode = (SKLabelNode *)[self nodeAtPoint:pos];
-    SKShapeNode *touchedNode1 = (SKShapeNode *)[self nodeAtPoint:pos];
     firstJump = YES;
     if(touchedNode != label){
     //NSLog(@"%@", NSStringFromCGPoint(pos));
         if(pos.x < 0) [self jump]; //left side of screen tap
         if(pos.x > 0) runningForw = YES;
-    }else if(touchedNode1 == throw){
-        NSLog(@"Throw\n");
     }
 }
 

@@ -51,7 +51,7 @@
         //If start is pressed, shift to next scene
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
         //SKScene * myScene = [[GameOverScene alloc] initWithSize:self.size];
-        [self.view presentScene:[[Universe sharedInstance] bss] transition: reveal];
+        [self.view presentScene:[[Universe sharedInstance] getBss] transition: reveal];
     }
 }
 

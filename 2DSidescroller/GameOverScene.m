@@ -41,7 +41,7 @@
     if(gameRestart == NO){
         gameRestart = YES;
         SKTransition *reveal = [SKTransition fadeWithDuration:0.5];
-        [self.view presentScene:[[Universe sharedInstance] gs] transition: reveal];
+        [self.view presentScene:[[Universe sharedInstance] getGs] transition: reveal];
     }
 }
 
