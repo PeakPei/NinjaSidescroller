@@ -10,7 +10,7 @@
 #import "Universe.h"
 
 @implementation GameOverScene{
-    SKLabelNode *label, *label1;
+    SKLabelNode *label, *label1, *label2;
     bool gameRestart;
 }
 
@@ -27,6 +27,12 @@
     label1.alpha = 0.0;
     label1.fontName = @"BradleyHandITCTT-Bold";
     [label1 runAction:[SKAction fadeInWithDuration:3.0]];
+    
+    label2 = (SKLabelNode *)[self childNodeWithName:@"//HSLabel"];
+    [label2 setText:[NSString stringWithFormat:@"High Score: %i",[[Universe sharedInstance] highscore]]];
+    label2.alpha = 0.0;
+    label2.fontName = @"BradleyHandITCTT-Bold";
+    [label2 runAction:[SKAction fadeInWithDuration:3.0]];
 }
 
 

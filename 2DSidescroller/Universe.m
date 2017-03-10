@@ -46,6 +46,9 @@ static GamePlayScene *gps = nil;
     if (gs)
         return gs;
     else gs = (GameScene *)[SKScene nodeWithFileNamed:@"GameScene"];
+    gos = nil;//reduce memory usage
+    bss = nil;
+    gps = nil;
     return gs;
 }
 
@@ -53,6 +56,9 @@ static GamePlayScene *gps = nil;
     if (gos)
         return gos;
     else gos = (GameOverScene *)[SKScene nodeWithFileNamed:@"GameOverScene"];
+    gs = nil;
+    bss = nil;
+    gps = nil;
     return gos;
 }
 
@@ -60,6 +66,9 @@ static GamePlayScene *gps = nil;
     if (gps)
         return gps;
     else gps = (GamePlayScene *)[SKScene nodeWithFileNamed:@"GamePlayScene"];
+    gs = nil;
+    bss = nil;
+    gos = nil;
     return gps;
 }
 
@@ -67,6 +76,9 @@ static GamePlayScene *gps = nil;
     if (bss)
         return bss;
     else bss = (BgSelectScene *)[SKScene nodeWithFileNamed:@"BgSelectScene"];
+    gs = nil;
+    gps = nil;
+    gos = nil;
     return bss;
 }
 

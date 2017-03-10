@@ -15,7 +15,7 @@ static const uint32_t worldCategory =  0x1 << 2;  // 000000000000000000000000000
 static const uint32_t wallCategory =  0x1 << 3;  // 00000000000000000000000000000100
 
 @implementation GamePlayScene {
-    SKLabelNode *label, *instructionLabel, *instructionLabel1, *instructionLabel2;
+    SKLabelNode *label, *label1, *instructionLabel, *instructionLabel1, *instructionLabel2;
     SKShapeNode *throw;
     bool gameEnd;
     SKAction *atlasAnimation;
@@ -184,7 +184,13 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
         if(cT < .01 && gameStart) {
             cT = (int)currentTime;
         }
-        if (gameStart)[[Universe sharedInstance] setScore:(int)(currentTime-cT)];
+        if (gameStart){
+            [[Universe sharedInstance] setScore:(int)(currentTime-cT)];
+            [label1 setText:[NSString stringWithFormat:@"Score: %i",[[Universe sharedInstance]score]]];
+            if([[Universe sharedInstance] score]> [[Universe sharedInstance] highscore]){
+                [[Universe sharedInstance] setHighscore:[[Universe sharedInstance] score]];
+            }
+        }
         //NSLog(@"score:%i, %f",[[Universe sharedInstance] score],cT);
         [self runParallexBackground]; // move parallax background
         //Check if jumping, allow for jumping through platforms
@@ -277,7 +283,7 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
 }
 
 -(void)setUpParallex{ //Set up parallex background
-    NSArray *bgArr0 = @[
+    /*NSArray *bgArr0 = @[
         @"tempWallpaper3.png"
     ];
     NSArray *bgArr1 = @[
@@ -299,11 +305,39 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
          @"Layer_0002_7.png",
          @"Layer_0001_8.png",
          @"Layer_0000_9.png"
-     ];
+     ];*/
     
-    NSArray *bgList = @[bgArr0,bgArr1,bgArr2];
+    //NSArray *bgList = @[bgArr0,bgArr1,bgArr2];
     
-    bgArr = bgList[[[Universe sharedInstance] bg]];
+    //bgArr = bgList[[[Universe sharedInstance] bg]];
+    //only init arrays if called, save memory
+    if([[Universe sharedInstance] bg] == 0){
+        bgArr = @[
+                  @"tempWallpaper3.png"
+                  ];
+    }else if([[Universe sharedInstance] bg] == 1){
+        bgArr = @[
+                  @"parallax-mountain-bg.png",
+                  @"parallax-mountain-montain-far.png",
+                  @"parallax-mountain-mountains.png",
+                  @"parallax-mountain-foreground-trees.png",
+                  @"parallax-mountain-trees.png"
+                  ];
+    }else if([[Universe sharedInstance] bg] == 2){
+        bgArr = @[
+                    @"Layer_0010_1.png",
+                    @"Layer_0009_2.png",
+                    @"Layer_0008_3.png",
+                    @"Layer_0007_Lights.png",
+                    @"Layer_0006_4.png",
+                    @"Layer_0005_5.png",
+                    @"Layer_0004_Lights.png",
+                    @"Layer_0003_6.png",
+                    @"Layer_0002_7.png",
+                    @"Layer_0001_8.png",
+                    @"Layer_0000_9.png"
+                    ];
+    }
     
     for (int j = 0; j < bgArr.count; j++){
         for(int i = 0; i < 2; i++){
@@ -333,13 +367,15 @@ static const uint32_t wallCategory =  0x1 << 3;  // 0000000000000000000000000000
     [self addChild:label];
     [label runAction:[SKAction fadeInWithDuration:2.0]];
     
-    /* throw = [SKShapeNode shapeNodeWithCircleOfRadius:self.frame.size.width*.05];
-    throw.fillColor = [SKColor whiteColor];
-    throw.position = CGPointMake(self.frame.size.width*.35, -self.frame.size.height*.35);
-    throw.name = @"throw";
-    throw.zPosition = 200;
-    [self addChild:throw];
-    [throw runAction:[SKAction fadeInWithDuration:2.0]];*/
+    label1 = [SKLabelNode labelNodeWithFontNamed:@"BradleyHandITCTT-Bold"];
+    label1.text = @"Score: 0";
+    label1.fontSize = 25;
+    label1.name = @"scoreLabel";
+    label1.zPosition = 200;
+    label1.position = CGPointMake(self.frame.size.width*.4, self.frame.size.height*.30);
+    label1.alpha = 0.0;
+    [self addChild:label1];
+    [label1 runAction:[SKAction fadeInWithDuration:2.0]];
     
     instructionLabel =[SKLabelNode labelNodeWithFontNamed:@"BradleyHandITCTT-Bold"];
     instructionLabel.text = @"Tap left side to jump or double jump";
